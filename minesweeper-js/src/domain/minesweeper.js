@@ -83,9 +83,36 @@ export class Minesweeper {
      * @param {number} y
      * @return {number}
      */
-    getAmountOfSurroundingBombs(x, y) {
-        return 0;
+    getAmountOfSurroundingBombs(y, x) {
+        let nearBombs = 0;
+
+        if(this.isBombOnPosition(x+1, y) === true)
+            nearBombs++;
+
+        if (this.isBombOnPosition(x, y+1)  === true)
+            nearBombs++;
+
+        if (this.isBombOnPosition(x+1, y+1)  === true)
+            nearBombs++;
+
+        if (this.isBombOnPosition(x-1, y)  === true)
+            nearBombs++;
+
+        if (this.isBombOnPosition(x, y-1)  === true)
+            nearBombs++;
+
+        if (this.isBombOnPosition(x-1, y-1)  === true)
+            nearBombs++;
+
+        if (this.isBombOnPosition(x+1, y-1)  === true)
+            nearBombs++;
+
+        if (this.isBombOnPosition(x-1, y+1)  === true)
+            nearBombs++;
+
+        return nearBombs;
     }
+
 
     /**
      * TODO: IMPLEMENT THIS
@@ -122,7 +149,32 @@ export class Minesweeper {
              this.isGameOver = true;
              this.array[y][x] = field.hidden;
          }
+         this.spare(x,y);
+         }
+
+    spare(x,y) {
+
+        if (this.array[x][y] === field.hidden) {
+
+            this.array[x][y] = field.visible;
+
+            if (this.getAmountOfSurroundingBombs(x, y) === 0) {
+                 if(x >= 0 && x < this.rows && y + 1 >= 0 && y + 1 < this.columns) {
+                     this.spare(x, y + 1);
+                }
+                if (x - 1 >= 0 && x - 1 < this.rows && y >= 0 && y < this.columns) {
+                    this.spare(x - 1, y);
+                }
+                if (x + 1 >= 0 && x + 1 < this.rows && y >= 0 && y < this.columns) {
+                    this.spare(x + 1, y);
+                }
+                if (x >= 0 && x < this.rows && y - 1 >= 0 && y - 1 < this.columns) {
+                    this.spare(x, y - 1);
+                }
+            }
+        }
     }
+
 
     /**
      * TODO: IMPLEMENT THIS
@@ -148,7 +200,8 @@ export class Minesweeper {
      * @returns {boolean}
      */
     didWin(){
-        return false;
+        if(this.bombLocation === field.flag)
+            return true;
     }
 
     /**
@@ -157,7 +210,8 @@ export class Minesweeper {
      * @returns {boolean}
      */
     didLoose() {
-        return true;
+        if (this.isGameOver === true)
+            return true;
     }
 
     /**
@@ -168,7 +222,5 @@ export class Minesweeper {
 
         return this.bombs;
     }
-
-
 
 }

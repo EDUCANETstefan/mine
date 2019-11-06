@@ -78,7 +78,7 @@ export class MinesweeperGUI {
      * @private
      */
     _getIcon(x, y) {
-        if (this.game.isGameOver && this.game.isBombOnPosition(x, y))
+        if (this.game.isGameOver && this.game.isBombOnPosition(y, x))
             return '💣';
         else
             switch (this.game.getField(x, y)) {
